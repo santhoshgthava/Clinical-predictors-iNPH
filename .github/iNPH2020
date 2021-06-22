@@ -1,0 +1,236 @@
+#1. install packages and load
+install.packages(c("robumeta", "metafor", "dplyr"))
+
+library("robumeta")
+library("metafor")
+library("dplyr")
+library("mada")
+library
+install.packages("mada", repos="http://R-Forge.R-project.org")
+
+###########################################################################################
+
+#load data for LIFT
+
+LIFT <- data.frame(TP = c(13,37,14,35,26,31), 
+                   FN = c(2,10,3,1,11,1),
+                   FP = c(4,0,0,9,11,11),
+                   TN = c(14,0,0,13,19,0))
+
+LIFT
+
+#execute madad function on dataset
+
+madad(LIFT)
+
+###########################################################################################
+
+
+#load data for TT
+
+TT <- data.frame(TP = c(21,51,8,74,6), 
+                   FN = c(4,47,5,6,6),
+                   FP = c(4,7,1,16,1),
+                   TN = c(40,10,1,4,1))
+
+TT$Authors <- c("Yamada et al.","Wikkelsø et al.", "Hertel et al.", "Ishikawa et al.", "Walter et al.")
+TT
+
+#execute madad function on dataset
+
+madad(TT)
+
+TTmeta <- madad(TT)
+TTmeta$fpr
+
+#make forest plots
+
+forest(madad(TT), type = "sens", main = "Forest plot", xlab = "Sensitivity", snames = TT$Authors)
+forest(madad(TT), type = "spec", main = "Forest plot", xlab = "Specificity", snames = TT$Authors)
+
+
+#logodd ratio
+
+madauni(TT)
+
+fit.DOR.DSL <- madauni(TT)
+
+summary(fit.DOR.DSL)
+
+forest(x=fit.DOR.DSL, main = "Forest plot: TT")
+
+#reitmsa SROC curve
+
+fit.reitsma <- reitsma(TT)
+fit.reitsma
+summary(fit.reitsma)
+
+plot(fit.reitsma, main = "SROC curve (bivariate model) for TT data", type = "ruttergatsonis", sroclwd = 2)
+
+points(fpr(TT), sens(TT), pch = 2)
+legend("bottomright", c("data", "summary estimate"), pch = c(2,1))
+legend("bottomleft", c("SROC", "conf. region"), lwd = c(2,1))
+
+
+###########################################################################################
+
+
+#load data for IT
+
+IT <- data.frame(TP = c(9,13,35,8,21), 
+                 FN = c(2,25,0,2,0),
+                 FP = c(2,1,9,7,1),
+                 TN = c(2,10,1,8,4))
+
+IT$Authors <- c("Bech-Azeddine et al.","Kahlon et al.", "Eide and Brean", "Mahr et al.", "Ryding et al.")
+IT
+
+#execute madad function on dataset
+
+madad(IT)
+
+ITmeta <- madad(IT)
+ITmeta$fpr
+
+
+#make forest plots
+
+forest(madad(IT), type = "sens", main = "Forest plot", xlab = "Sensitivity", snames = IT$Authors)
+forest(madad(IT), type = "spec", main = "Forest plot", xlab = "Specificity", snames = IT$Authors)
+
+
+#logodd ratio
+
+madauni(IT)
+
+fit.DOR.DSL2 <- madauni(IT)
+
+summary(fit.DOR.DSL2)
+
+forest(x=fit.DOR.DSL2, main = "Forest plot: IT")
+
+#reitmsa SROC curve
+fit.reitsma2<- reitsma(IT)
+fit.reitsma2
+summary(fit.reitsma2)
+plot(fit.reitsma2, main = "SROC curve (bivariate model) for IT data", type = "ruttergatsonis", sroclwd = 2)
+
+points(fpr(IT), sens(IT), pch = 2)
+legend("bottomright", c("data", "summary estimate"), pch = c(2,1))
+legend("bottomleft", c("SROC", "conf. region"), lwd = c(2,1))
+
+
+###########################################################################################
+
+
+#load data for ELD
+
+ELD <- data.frame(TP = c(60,76,55,32,15,9), 
+                 FN = c(0,4,0,3,1,2),
+                 FP = c(2,8,2,9,3,0),
+                 TN = c(6,14,3,7,2,11))
+
+ELD$Authors <- c("Gallina et al.","Marmarou et al.", "Chotai et al.", "Woodworth et al.", "Eide and Stanisic", "Panagiotopoulos et al.")
+ELD
+
+#execute madad function on dataset
+
+madad(ELD)
+
+ELDmeta <- madad(ELD)
+ELDmeta$fpr
+
+
+#make forest plots
+
+forest(madad(ELD), type = "sens", main = "Forest plot", xlab = "Sensitivity", snames = ELD$Authors)
+forest(madad(ELD), type = "spec", main = "Forest plot", xlab = "Specificity", snames = ELD$Authors)
+
+
+#logodd ratio
+
+madauni(ELD)
+
+fit.DOR.DSL3 <- madauni(ELD)
+
+summary(fit.DOR.DSL3)
+
+forest(x=fit.DOR.DSL3, main = "Forest plot: ELD")
+
+#reitmsa SROC curve
+fit.reitsma3<- reitsma(ELD)
+fit.reitsma3
+summary(fit.reitsma3)
+plot(fit.reitsma3, main = "SROC curve (bivariate model) for ELD data", type = "ruttergatsonis", sroclwd = 2)
+
+points(fpr(ELD), sens(ELD), pch = 2)
+legend("bottomright", c("data", "summary estimate"), pch = c(2,1))
+legend("bottomleft", c("SROC", "conf. region"), lwd = c(2,1))
+
+
+###########################################################################################
+
+
+#load data for ICPM
+
+ICPM <- data.frame(TP = c(9,54,21,23,100,32,16), 
+                 FN = c(3,10,0,1,2,0,0),
+                 FP = c(6,3,0,1,8,1,3),
+                 TN = c(14,22,6,6,20,16,3))
+
+ICPM$Authors <- c("Mahr et al.","Garcia-Armengol et al. ", "Eide et al.", "Eide and Stanisic", "Eide and Sortberg", "Eide (2005)", "Eide (2011)")
+ICPM
+
+#execute madad function on dataset
+
+madad(ICPM)
+
+ICPMmeta <- madad(ICPM)
+ICPMmeta$fpr
+
+
+#make forest plots
+
+forest(madad(ICPM), type = "sens", main = "Forest plot", xlab = "Sensitivity", snames = ICPM$Authors)
+forest(madad(ICPM), type = "spec", main = "Forest plot", xlab = "Specificity", snames = ICPM$Authors)
+
+
+#logodd ratio
+
+madauni(ICPM)
+
+fit.DOR.DSL4 <- madauni(ICPM)
+
+summary(fit.DOR.DSL4)
+
+forest(x=fit.DOR.DSL4, main = "Forest plot: ICPM")
+
+#reitmsa SROC curve
+fit.reitsma4<- reitsma(ICPM)
+fit.reitsma4
+summary(fit.reitsma4)
+
+plot(fit.reitsma4, main = "SROC curve (bivariate model) for ICPM data", type = "ruttergatsonis", sroclwd = 2)
+
+points(fpr(ICPM), sens(ICPM), pch = 2)
+legend("bottomright", c("data", "summary estimate"), pch = c(2,1))
+legend("bottomleft", c("SROC", "conf. region"), lwd = c(2,1))
+
+
+###########################################################################################
+
+#Risk of bias 
+
+install.packages("robvis")
+library("robvis")
+install.packages("utf8")
+library("utf8")
+#loading excel sheet
+library(readxl)
+NPH_Risk_of_bias <- read.csv("~/Desktop/Papers/NPH paper/NPHRB.csv")
+NPH_Risk_of_bias
+
+#running Risk of bias analysis
+
+rob_summary(NPH_Risk_of_bias, tool = "QUADAS-2", weighted = FALSE, overall = TRUE)
+
