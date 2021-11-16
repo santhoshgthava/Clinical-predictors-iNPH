@@ -1,0 +1,54 @@
+#Install relevant packages
+install.packages(c("robumeta", "metafor", "dplyr"))
+install.packages("meta")
+install.packages("dmetar")
+install.packages("readxl")
+#into library load
+library("robumeta")
+library("metafor")
+library("dplyr")
+library("mada")
+library("meta")
+library("dmetar")
+library("readxl")
+
+
+
+
+
+
+# Load dataset from dmetar (or download and open manually)
+library(readxl)
+iNPH_Biochem_TTau_Excel <- read_excel("~/Desktop/iNPH Biochem - TTau Excel.xlsx")
+View(iNPH_Biochem_TTau_Excel)
+
+# Use metcont to pool results.
+meta_ttau <- metacont(n.e = iNPH_Biochem_TTau_Excel$n.SR,
+                   mean.e = iNPH_Biochem_TTau_Excel$mean.SR,
+                   sd.e = iNPH_Biochem_TTau_Excel$sd.SR,
+                   n.c = iNPH_Biochem_TTau_Excel$n.SNR,
+                   mean.c = iNPH_Biochem_TTau_Excel$mean.SNR,
+                   sd.c = iNPH_Biochem_TTau_Excel$sd.SNR,
+                   studlab = iNPH_Biochem_TTau_Excel$Author,
+                   data = iNPH_Biochem_TTau_Excel,
+                   sm = "SMD",
+                   method.smd = "Cohen",
+                   fixed = FALSE,
+                   random = TRUE,
+                   method.tau = "REML",
+                   hakn = TRUE,
+                   title = "T-Tau levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_ttau)
+
+#make the plot
+
+forest.meta(meta_ttau, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "Shunt responders",
+            lab.c = "Shunt non-responders")
