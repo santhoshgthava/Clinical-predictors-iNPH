@@ -51,4 +51,8 @@ forest.meta(meta_ttau,
             print.tau2 = FALSE,
             leftlabs = c("Author", "g", "SE"),
             lab.e = "Shunt responders",
-            lab.c = "Shunt non-responders")
+            lab.c = "Shunt non-responders",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
