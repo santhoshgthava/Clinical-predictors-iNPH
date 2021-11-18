@@ -58,46 +58,6 @@ forest.meta(meta_ttau,
 
 
 
-# Load TTAU dataset from dmetar (or download and open manually)
-library(readxl)
-iNPH_Biochem_TTau_Excel <- read_excel("~/Desktop/iNPH Biochem - TTau Excel.xlsx")
-View(iNPH_Biochem_TTau_Excel)
-
-# Use metcont to pool results.
-meta_ttau <- metacont(n.e = iNPH_Biochem_TTau_Excel$n.SR,
-                      mean.e = iNPH_Biochem_TTau_Excel$mean.SR,
-                      sd.e = iNPH_Biochem_TTau_Excel$sd.SR,
-                      n.c = iNPH_Biochem_TTau_Excel$n.SNR,
-                      mean.c = iNPH_Biochem_TTau_Excel$mean.SNR,
-                      sd.c = iNPH_Biochem_TTau_Excel$sd.SNR,
-                      studlab = iNPH_Biochem_TTau_Excel$Author,
-                      data = iNPH_Biochem_TTau_Excel,
-                      sm = "SMD",
-                      method.smd = "Cohen",
-                      fixed = FALSE,
-                      random = TRUE,
-                      method.tau = "REML",
-                      hakn = TRUE,
-                      title = "T-Tau levels in SR vs N-SR")
-
-#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
-
-print(meta_ttau)
-
-#make the plot
-
-forest.meta(meta_ttau, 
-            sortvar = TE,
-            predict = TRUE, 
-            print.tau2 = FALSE,
-            leftlabs = c("Author", "g", "SE"),
-            lab.e = "Shunt responders",
-            lab.c = "Shunt non-responders",
-            JAMA.pval = FALSE,
-            test.overall.random = TRUE,
-            label.test.overall.random = "Overall statistical result of model: ")
-
-
 
 ####################################################################################################################
 
@@ -142,3 +102,146 @@ forest.meta(meta_ptau,
             JAMA.pval = FALSE,
             test.overall.random = TRUE,
             label.test.overall.random = "Overall statistical result of model: ")
+
+
+
+
+####################################################################################################################
+
+
+
+# Load Abeta dataset from dmetar (or download and open manually)
+
+library(readxl)
+iNPH_Biochem_Abeta_Excel <- read_excel("~/Desktop/iNPH Biochem - Abeta.xlsx")
+View(iNPH_Biochem_Abeta_Excel)
+
+# Use metcont to pool results.
+meta_Abeta <- metacont(n.e = iNPH_Biochem_Abeta_Excel$n.SR,
+                      mean.e = iNPH_Biochem_Abeta_Excel$mean.SR,
+                      sd.e = iNPH_Biochem_Abeta_Excel$sd.SR,
+                      n.c = iNPH_Biochem_Abeta_Excel$n.SNR,
+                      mean.c = iNPH_Biochem_Abeta_Excel$mean.SNR,
+                      sd.c = iNPH_Biochem_Abeta_Excel$sd.SNR,
+                      studlab = iNPH_Biochem_Abeta_Excel$Author,
+                      data = iNPH_Biochem_Abeta_Excel,
+                      sm = "SMD",
+                      method.smd = "Cohen",
+                      fixed = FALSE,
+                      random = TRUE,
+                      method.tau = "REML",
+                      hakn = TRUE,
+                      title = "Abeta levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_Abeta)
+
+#make the plot
+
+forest.meta(meta_Abeta, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
+
+
+####################################################################################################################
+
+
+
+# Load NFL dataset from dmetar (or download and open manually)
+
+library(readxl)
+iNPH_Biochem_NFL_Excel <- read_excel("~/Desktop/iNPH Biochem - NFL.xlsx")
+View(iNPH_Biochem_NFL_Excel)
+
+# Use metcont to pool results.
+meta_NFL <- metacont(n.e = iNPH_Biochem_NFL_Excel$n.SR,
+                       mean.e = iNPH_Biochem_NFL_Excel$mean.SR,
+                       sd.e = iNPH_Biochem_NFL_Excel$sd.SR,
+                       n.c = iNPH_Biochem_NFL_Excel$n.SNR,
+                       mean.c = iNPH_Biochem_NFL_Excel$mean.SNR,
+                       sd.c = iNPH_Biochem_NFL_Excel$sd.SNR,
+                       studlab = iNPH_Biochem_NFL_Excel$Author,
+                       data = iNPH_Biochem_NFL_Excel,
+                       sm = "SMD",
+                       method.smd = "Cohen",
+                       fixed = FALSE,
+                       random = TRUE,
+                       method.tau = "REML",
+                       hakn = TRUE,
+                       title = "NFL levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_NFL)
+
+#make the plot
+
+forest.meta(meta_NFL, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
+
+####################################################################################################################
+
+
+
+# Load Sulfatide dataset from dmetar (or download and open manually)
+
+library(readxl)
+iNPH_Biochem_Sulfatide_Excel <- read_excel("~/Desktop/iNPH Biochem - Sulfatide.xlsx")
+View(iNPH_Biochem_Sulfatide_Excel)
+
+# Use metcont to pool results.
+meta_Sulfatide <- metacont(n.e = iNPH_Biochem_Sulfatide_Excel$n.SR,
+                     mean.e = iNPH_Biochem_Sulfatide_Excel$mean.SR,
+                     sd.e = iNPH_Biochem_Sulfatide_Excel$sd.SR,
+                     n.c = iNPH_Biochem_Sulfatide_Excel$n.SNR,
+                     mean.c = iNPH_Biochem_Sulfatide_Excel$mean.SNR,
+                     sd.c = iNPH_Biochem_Sulfatide_Excel$sd.SNR,
+                     studlab = iNPH_Biochem_Sulfatide_Excel$Author,
+                     data = iNPH_Biochem_Sulfatide_Excel,
+                     sm = "SMD",
+                     method.smd = "Cohen",
+                     fixed = FALSE,
+                     random = TRUE,
+                     method.tau = "REML",
+                     hakn = TRUE,
+                     title = "Sulfatide levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_Sulfatide)
+
+#make the plot
+
+forest.meta(meta_Sulfatide, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
+
+
+
+
