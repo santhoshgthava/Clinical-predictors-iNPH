@@ -17,7 +17,7 @@ library("readxl")
 
 
 
-# Load dataset from dmetar (or download and open manually)
+# Load TTAU dataset from dmetar (or download and open manually)
 library(readxl)
 iNPH_Biochem_TTau_Excel <- read_excel("~/Desktop/iNPH Biochem - TTau Excel.xlsx")
 View(iNPH_Biochem_TTau_Excel)
@@ -50,9 +50,95 @@ forest.meta(meta_ttau,
             predict = TRUE, 
             print.tau2 = FALSE,
             leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
+
+
+# Load TTAU dataset from dmetar (or download and open manually)
+library(readxl)
+iNPH_Biochem_TTau_Excel <- read_excel("~/Desktop/iNPH Biochem - TTau Excel.xlsx")
+View(iNPH_Biochem_TTau_Excel)
+
+# Use metcont to pool results.
+meta_ttau <- metacont(n.e = iNPH_Biochem_TTau_Excel$n.SR,
+                      mean.e = iNPH_Biochem_TTau_Excel$mean.SR,
+                      sd.e = iNPH_Biochem_TTau_Excel$sd.SR,
+                      n.c = iNPH_Biochem_TTau_Excel$n.SNR,
+                      mean.c = iNPH_Biochem_TTau_Excel$mean.SNR,
+                      sd.c = iNPH_Biochem_TTau_Excel$sd.SNR,
+                      studlab = iNPH_Biochem_TTau_Excel$Author,
+                      data = iNPH_Biochem_TTau_Excel,
+                      sm = "SMD",
+                      method.smd = "Cohen",
+                      fixed = FALSE,
+                      random = TRUE,
+                      method.tau = "REML",
+                      hakn = TRUE,
+                      title = "T-Tau levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_ttau)
+
+#make the plot
+
+forest.meta(meta_ttau, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
             lab.e = "Shunt responders",
             lab.c = "Shunt non-responders",
             JAMA.pval = FALSE,
             test.overall.random = TRUE,
             label.test.overall.random = "Overall statistical result of model: ")
 
+
+
+####################################################################################################################
+
+
+
+# Load P-TAU dataset from dmetar (or download and open manually)
+
+library(readxl)
+iNPH_Biochem_PTau_Excel <- read_excel("~/Desktop/iNPH Biochem - PTau.xlsx")
+View(iNPH_Biochem_PTau_Excel)
+
+# Use metcont to pool results.
+meta_ptau <- metacont(n.e = iNPH_Biochem_PTau_Excel$n.SR,
+                      mean.e = iNPH_Biochem_PTau_Excel$mean.SR,
+                      sd.e = iNPH_Biochem_PTau_Excel$sd.SR,
+                      n.c = iNPH_Biochem_PTau_Excel$n.SNR,
+                      mean.c = iNPH_Biochem_PTau_Excel$mean.SNR,
+                      sd.c = iNPH_Biochem_PTau_Excel$sd.SNR,
+                      studlab = iNPH_Biochem_PTau_Excel$Author,
+                      data = iNPH_Biochem_PTau_Excel,
+                      sm = "SMD",
+                      method.smd = "Cohen",
+                      fixed = FALSE,
+                      random = TRUE,
+                      method.tau = "REML",
+                      hakn = TRUE,
+                      title = "P-Tau levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_ptau)
+
+#make the plot
+
+forest.meta(meta_ptau, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
