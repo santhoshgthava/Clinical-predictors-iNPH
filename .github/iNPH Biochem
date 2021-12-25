@@ -19,25 +19,25 @@ library("readxl")
 
 # Load TTAU dataset from dmetar (or download and open manually)
 library(readxl)
-iNPH_Biochem_TTau_Excel <- read_excel("~/Desktop/iNPH Biochem - TTau Excel.xlsx")
+iNPH_Biochem_TTau_Excel <- read_excel("~/Desktop/iNPH Biochem - TTau.xlsx")
 View(iNPH_Biochem_TTau_Excel)
 
 # Use metcont to pool results.
 meta_ttau <- metacont(n.e = iNPH_Biochem_TTau_Excel$n.SR,
-                   mean.e = iNPH_Biochem_TTau_Excel$mean.SR,
-                   sd.e = iNPH_Biochem_TTau_Excel$sd.SR,
-                   n.c = iNPH_Biochem_TTau_Excel$n.SNR,
-                   mean.c = iNPH_Biochem_TTau_Excel$mean.SNR,
-                   sd.c = iNPH_Biochem_TTau_Excel$sd.SNR,
-                   studlab = iNPH_Biochem_TTau_Excel$Author,
-                   data = iNPH_Biochem_TTau_Excel,
-                   sm = "SMD",
-                   method.smd = "Cohen",
-                   fixed = FALSE,
-                   random = TRUE,
-                   method.tau = "REML",
-                   hakn = TRUE,
-                   title = "T-Tau levels in SR vs N-SR")
+                      mean.e = iNPH_Biochem_TTau_Excel$mean.SR,
+                      sd.e = iNPH_Biochem_TTau_Excel$sd.SR,
+                      n.c = iNPH_Biochem_TTau_Excel$n.SNR,
+                      mean.c = iNPH_Biochem_TTau_Excel$mean.SNR,
+                      sd.c = iNPH_Biochem_TTau_Excel$sd.SNR,
+                      studlab = iNPH_Biochem_TTau_Excel$Author,
+                      data = iNPH_Biochem_TTau_Excel,
+                      sm = "SMD",
+                      method.smd = "Cohen",
+                      fixed = FALSE,
+                      random = TRUE,
+                      method.tau = "REML",
+                      hakn = TRUE,
+                      title = "T-Tau levels in SR vs N-SR")
 
 #numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
 
@@ -57,6 +57,107 @@ forest.meta(meta_ttau,
             label.test.overall.random = "Overall statistical result of model: ")
 
 
+#meta-regression metareg: single ones (all)
+
+metareg_ttau_females <- metareg(meta_ttau,
+        ~ females)
+print(metareg_ttau_females)
+
+
+metareg_ttau_age <- metareg(meta_ttau,
+                                ~ age)
+print(metareg_ttau_age)
+
+
+metareg_ttau_sample <- metareg(meta_ttau,
+                            ~ sample)
+print(metareg_ttau_sample)
+
+
+metareg_ttau_neuro <- metareg(meta_ttau,
+                               ~ neuro)
+print(metareg_ttau_neuro)
+
+
+metareg_ttau_dropout<- metareg(meta_ttau,
+                              ~ dropout)
+print(metareg_ttau_dropout)
+
+
+metareg_ttau_srm<- metareg(meta_ttau,
+                               ~ srm)
+print(metareg_ttau_srm)
+
+metareg_ttau_date <- metareg(meta_ttau,
+                           ~ date)
+print(metareg_ttau_date)
+# meta regression step 2: neuro plus others
+
+metareg_ttau_neuroagefemales <- metareg(meta_ttau,
+                              ~ neuro + age + females)
+print(metareg_ttau_neuroagefemales)
+
+metareg_ttau_neurosampledate <- metareg(meta_ttau,
+                                        ~  neuro + sample + date)
+print(metareg_ttau_neurosampledate)
+
+metareg_ttau_neurofemalesdate <- metareg(meta_ttau,
+                                        ~  neuro + females + date)
+print(metareg_ttau_neuroagefemales)
+
+metareg_ttau_neuroagedate <- metareg(meta_ttau,
+                                         ~  neuro + age + date)
+print(metareg_ttau_neuroagedate)
+
+metareg_ttau_neurosamplefemales <- metareg(meta_ttau,
+                                     ~  neuro + sample + females)
+
+print(metareg_ttau_neurosamplefemales)
+
+#other models were tried, no significance
+
+#plot the metaregression neuro
+
+bubble(metareg_ttau_neuro, studlab = TRUE, scale = TRUE)
+
+#meta-analysis without the study positive for "neuro" (explicitly included neuro patients)
+
+iNPH_Biochem_TTau_Excel2 <- read_excel("~/Desktop/iNPH Biochem - TTau2.xlsx")
+View(iNPH_Biochem_TTau_Excel2)
+
+# Use metcont to pool results.
+meta_ttau2 <- metacont(n.e = iNPH_Biochem_TTau_Excel2$n.SR,
+                      mean.e = iNPH_Biochem_TTau_Excel2$mean.SR,
+                      sd.e = iNPH_Biochem_TTau_Excel2$sd.SR,
+                      n.c = iNPH_Biochem_TTau_Excel2$n.SNR,
+                      mean.c = iNPH_Biochem_TTau_Excel2$mean.SNR,
+                      sd.c = iNPH_Biochem_TTau_Excel2$sd.SNR,
+                      studlab = iNPH_Biochem_TTau_Excel2$Author,
+                      data = iNPH_Biochem_TTau_Excel2,
+                      sm = "SMD",
+                      method.smd = "Cohen",
+                      fixed = FALSE,
+                      random = TRUE,
+                      method.tau = "REML",
+                      hakn = TRUE,
+                      title = "T-Tau levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_ttau2)
+
+#make the plot
+
+forest.meta(meta_ttau2, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
 
 
 ####################################################################################################################
@@ -105,6 +206,41 @@ forest.meta(meta_ptau,
 
 
 
+#meta-regression metareg: single ones (all)
+
+metareg_ptau_females <- metareg(meta_ptau,
+                                ~ females)
+print(metareg_ptau_females)
+
+
+metareg_ptau_age <- metareg(meta_ptau,
+                            ~ age)
+print(metareg_ptau_age)
+
+
+metareg_ptau_sample <- metareg(meta_ptau,
+                               ~ sample)
+print(metareg_ptau_sample)
+
+
+metareg_ptau_neuro <- metareg(meta_ptau,
+                              ~ neuro)
+print(metareg_ptau_neuro)
+
+
+metareg_ptau_dropout<- metareg(meta_ptau,
+                               ~ dropout)
+print(metareg_ptau_dropout)
+
+
+metareg_ptau_srm<- metareg(meta_ptau,
+                           ~ srm)
+print(metareg_ptau_srm)
+
+metareg_ptau_date <- metareg(meta_ptau,
+                             ~ date)
+print(metareg_ptau_date)
+
 
 ####################################################################################################################
 
@@ -118,20 +254,20 @@ View(iNPH_Biochem_Abeta_Excel)
 
 # Use metcont to pool results.
 meta_Abeta <- metacont(n.e = iNPH_Biochem_Abeta_Excel$n.SR,
-                      mean.e = iNPH_Biochem_Abeta_Excel$mean.SR,
-                      sd.e = iNPH_Biochem_Abeta_Excel$sd.SR,
-                      n.c = iNPH_Biochem_Abeta_Excel$n.SNR,
-                      mean.c = iNPH_Biochem_Abeta_Excel$mean.SNR,
-                      sd.c = iNPH_Biochem_Abeta_Excel$sd.SNR,
-                      studlab = iNPH_Biochem_Abeta_Excel$Author,
-                      data = iNPH_Biochem_Abeta_Excel,
-                      sm = "SMD",
-                      method.smd = "Cohen",
-                      fixed = FALSE,
-                      random = TRUE,
-                      method.tau = "REML",
-                      hakn = TRUE,
-                      title = "Abeta levels in SR vs N-SR")
+                       mean.e = iNPH_Biochem_Abeta_Excel$mean.SR,
+                       sd.e = iNPH_Biochem_Abeta_Excel$sd.SR,
+                       n.c = iNPH_Biochem_Abeta_Excel$n.SNR,
+                       mean.c = iNPH_Biochem_Abeta_Excel$mean.SNR,
+                       sd.c = iNPH_Biochem_Abeta_Excel$sd.SNR,
+                       studlab = iNPH_Biochem_Abeta_Excel$Author,
+                       data = iNPH_Biochem_Abeta_Excel,
+                       sm = "SMD",
+                       method.smd = "Cohen",
+                       fixed = FALSE,
+                       random = TRUE,
+                       method.tau = "REML",
+                       hakn = TRUE,
+                       title = "Abeta levels in SR vs N-SR")
 
 #numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
 
@@ -151,6 +287,96 @@ forest.meta(meta_Abeta,
             label.test.overall.random = "Overall statistical result of model: ")
 
 
+#meta-regression metareg: single ones (all)
+
+metareg_Abeta_females <- metareg(meta_Abeta,
+                                ~ females)
+print(metareg_Abeta_females)
+
+
+metareg_Abeta_age <- metareg(meta_Abeta,
+                            ~ age)
+print(metareg_Abeta_age)
+
+
+metareg_Abeta_sample <- metareg(meta_Abeta,
+                               ~ sample)
+print(metareg_Abeta_sample)
+
+
+metareg_Abeta_neuro <- metareg(meta_Abeta,
+                              ~ neuro)
+print(metareg_Abeta_neuro)
+
+
+metareg_Abeta_dropout<- metareg(meta_Abeta,
+                               ~ dropout)
+print(metareg_Abeta_dropout)
+
+
+metareg_Abeta_srm<- metareg(meta_Abeta,
+                           ~ srm)
+print(metareg_Abeta_srm)
+
+metareg_Abeta_date <- metareg(meta_Abeta,
+                             ~ date)
+print(metareg_Abeta_date)
+
+# meta regression step 2: neuro plus others
+
+metareg_ttau_neuroagefemales <- metareg(meta_ttau,
+                                        ~ neuro + age + females)
+print(metareg_ttau_neuroagefemales)
+
+metareg_ttau_neurosampledate <- metareg(meta_ttau,
+                                        ~  neuro + sample + date)
+print(metareg_ttau_neurosampledate)
+
+#other models were tried, no significance
+
+#plot the metaregression neuro
+
+bubble(metareg_ttau_neuro, studlab = TRUE, scale = TRUE)
+
+#meta-analysis without the study positive for "neuro" (explicitly included neuro patients)
+
+iNPH_Biochem_TTau_Excel2 <- read_excel("~/Desktop/iNPH Biochem - TTau2.xlsx")
+View(iNPH_Biochem_TTau_Excel2)
+
+# Use metcont to pool results.
+meta_ttau2 <- metacont(n.e = iNPH_Biochem_TTau_Excel2$n.SR,
+                       mean.e = iNPH_Biochem_TTau_Excel2$mean.SR,
+                       sd.e = iNPH_Biochem_TTau_Excel2$sd.SR,
+                       n.c = iNPH_Biochem_TTau_Excel2$n.SNR,
+                       mean.c = iNPH_Biochem_TTau_Excel2$mean.SNR,
+                       sd.c = iNPH_Biochem_TTau_Excel2$sd.SNR,
+                       studlab = iNPH_Biochem_TTau_Excel2$Author,
+                       data = iNPH_Biochem_TTau_Excel2,
+                       sm = "SMD",
+                       method.smd = "Cohen",
+                       fixed = FALSE,
+                       random = TRUE,
+                       method.tau = "REML",
+                       hakn = TRUE,
+                       title = "T-Tau levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_ttau2)
+
+#make the plot
+
+forest.meta(meta_ttau2, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
 
 ####################################################################################################################
 
@@ -164,20 +390,20 @@ View(iNPH_Biochem_NFL_Excel)
 
 # Use metcont to pool results.
 meta_NFL <- metacont(n.e = iNPH_Biochem_NFL_Excel$n.SR,
-                       mean.e = iNPH_Biochem_NFL_Excel$mean.SR,
-                       sd.e = iNPH_Biochem_NFL_Excel$sd.SR,
-                       n.c = iNPH_Biochem_NFL_Excel$n.SNR,
-                       mean.c = iNPH_Biochem_NFL_Excel$mean.SNR,
-                       sd.c = iNPH_Biochem_NFL_Excel$sd.SNR,
-                       studlab = iNPH_Biochem_NFL_Excel$Author,
-                       data = iNPH_Biochem_NFL_Excel,
-                       sm = "SMD",
-                       method.smd = "Cohen",
-                       fixed = FALSE,
-                       random = TRUE,
-                       method.tau = "REML",
-                       hakn = TRUE,
-                       title = "NFL levels in SR vs N-SR")
+                     mean.e = iNPH_Biochem_NFL_Excel$mean.SR,
+                     sd.e = iNPH_Biochem_NFL_Excel$sd.SR,
+                     n.c = iNPH_Biochem_NFL_Excel$n.SNR,
+                     mean.c = iNPH_Biochem_NFL_Excel$mean.SNR,
+                     sd.c = iNPH_Biochem_NFL_Excel$sd.SNR,
+                     studlab = iNPH_Biochem_NFL_Excel$Author,
+                     data = iNPH_Biochem_NFL_Excel,
+                     sm = "SMD",
+                     method.smd = "Cohen",
+                     fixed = FALSE,
+                     random = TRUE,
+                     method.tau = "REML",
+                     hakn = TRUE,
+                     title = "NFL levels in SR vs N-SR")
 
 #numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
 
@@ -209,20 +435,20 @@ View(iNPH_Biochem_Sulfatide_Excel)
 
 # Use metcont to pool results.
 meta_Sulfatide <- metacont(n.e = iNPH_Biochem_Sulfatide_Excel$n.SR,
-                     mean.e = iNPH_Biochem_Sulfatide_Excel$mean.SR,
-                     sd.e = iNPH_Biochem_Sulfatide_Excel$sd.SR,
-                     n.c = iNPH_Biochem_Sulfatide_Excel$n.SNR,
-                     mean.c = iNPH_Biochem_Sulfatide_Excel$mean.SNR,
-                     sd.c = iNPH_Biochem_Sulfatide_Excel$sd.SNR,
-                     studlab = iNPH_Biochem_Sulfatide_Excel$Author,
-                     data = iNPH_Biochem_Sulfatide_Excel,
-                     sm = "SMD",
-                     method.smd = "Cohen",
-                     fixed = FALSE,
-                     random = TRUE,
-                     method.tau = "REML",
-                     hakn = TRUE,
-                     title = "Sulfatide levels in SR vs N-SR")
+                           mean.e = iNPH_Biochem_Sulfatide_Excel$mean.SR,
+                           sd.e = iNPH_Biochem_Sulfatide_Excel$sd.SR,
+                           n.c = iNPH_Biochem_Sulfatide_Excel$n.SNR,
+                           mean.c = iNPH_Biochem_Sulfatide_Excel$mean.SNR,
+                           sd.c = iNPH_Biochem_Sulfatide_Excel$sd.SNR,
+                           studlab = iNPH_Biochem_Sulfatide_Excel$Author,
+                           data = iNPH_Biochem_Sulfatide_Excel,
+                           sm = "SMD",
+                           method.smd = "Cohen",
+                           fixed = FALSE,
+                           random = TRUE,
+                           method.tau = "REML",
+                           hakn = TRUE,
+                           title = "Sulfatide levels in SR vs N-SR")
 
 #numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
 
@@ -240,6 +466,106 @@ forest.meta(meta_Sulfatide,
             JAMA.pval = FALSE,
             test.overall.random = TRUE,
             label.test.overall.random = "Overall statistical result of model: ")
+
+
+
+####################################################################################################################
+
+
+
+# Load Total set dataset from dmetar (or download and open manually)
+
+library(readxl)
+iNPH_Biochem_Total_Excel <- read_excel("~/Desktop/iNPH Biochem - Total.xlsx")
+View(iNPH_Biochem_Total_Excel)
+
+# Use metcont to pool results.
+meta_Total <- metacont(n.e = iNPH_Biochem_Total_Excel$n.SR,
+                       mean.e = iNPH_Biochem_Total_Excel$mean.SR,
+                       sd.e = iNPH_Biochem_Total_Excel$sd.SR,
+                       n.c = iNPH_Biochem_Total_Excel$n.SNR,
+                       mean.c = iNPH_Biochem_Total_Excel$mean.SNR,
+                       sd.c = iNPH_Biochem_Total_Excel$sd.SNR,
+                       studlab = iNPH_Biochem_Total_Excel$Author,
+                       data = iNPH_Biochem_Total_Excel,
+                       sm = "SMD",
+                       method.smd = "Cohen",
+                       fixed = FALSE,
+                       random = TRUE,
+                       method.tau = "REML",
+                       hakn = TRUE,
+                       title = "Total levels in SR vs N-SR")
+
+#numerical visualisation of meta_ttau (note that SR are the experimental group so reference group, so minus result means it is less in them)
+
+print(meta_Total)
+
+#make the plot
+
+forest.meta(meta_Total, 
+            sortvar = TE,
+            predict = TRUE, 
+            print.tau2 = FALSE,
+            leftlabs = c("Author", "g", "SE"),
+            lab.e = "S-R",
+            lab.c = "S-NR",
+            JAMA.pval = FALSE,
+            test.overall.random = TRUE,
+            label.test.overall.random = "Overall statistical result of model: ")
+
+
+#Eggers (Publication bias) calculatiom
+
+eggersplot <-metabias(
+  meta_Total,
+  method.bias = meta_Total$method.bias,
+  plotit = FALSE,
+  correct = FALSE,
+  k.min = 10 
+)
+
+print(eggersplot,
+      digits = gs("digits"),
+      digits.stat = gs("digits.stat"),
+      digits.pval = max(gs("digits.pval"), 2),
+      digits.se = gs("digits.se"),
+      digits.tau2 = gs("digits.tau2"),
+      scientific.pval = gs("scientific.pval"),
+      big.mark = gs("big.mark"),
+      zero.pval = gs("zero.pval"),
+      JAMA.pval = gs("JAMA.pval"),
+      text.tau2 = gs("text.tau2"))
+
+
+
+
+#Eggers (Publication bias) plot
+
+
+eggersplot <-metabias(
+  meta_Total,
+  method.bias = meta_Total$method.bias,
+  plotit = TRUE,
+  correct = FALSE,
+  k.min = 14 
+)
+
+funnel.meta(meta_Total,
+            xlim = c(-2, 1),
+            studlab = FALSE,
+            method.bias = "linreg")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
